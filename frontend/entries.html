@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📖 My Entries — Mood Journal</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="app">
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <a class="back" href="index.html">← 🏠 Home</a>
+    <h1 class="app-title">📖 My Entries</h1>
+  </header>
+<section class="card">
+  <h2>🔍 Search Entries</h2>
+  <input type="text" id="searchBox" placeholder="Search notes or tags..." onkeyup="searchEntries()">
+</section>
+<div id="entriesList"></div>
+
+  <!-- Entries Section -->
+  <main class="container">
+    <section class="card entries-list" id="entriesList">
+      <div class="empty">✨ No entries yet — write your first one! 🖋️</div>
+      <!-- Entries will be dynamically injected by JS -->
+    </section>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="new.html">✍️ Journal</a>
+    <a href="#">🌬️ Breathe</a>
+    <a href="insights.html">📊 Insights</a>
+    <a href="entries.html" class="active">📖 Entries</a>
+  </nav>
+<div class="entry-card">
+  <p><strong>Mood:</strong> 😊 Good</p>
+  <p><strong>Note:</strong> Had a good day!</p>
+  <div class="card-actions">
+    <button onclick="editEntry(1)">✏️ Edit</button>
+    <button onclick="deleteEntry(1)">🗑️ Delete</button>
+  </div>
+</div>
+<button onclick="window.location.href='http://127.0.0.1:5000/api/export/csv'">📤 Export CSV</button>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Mood Journal | Built with ❤️ & mindfulness</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/app.js"></script>
+  <script>
+    // Load entries from API
+    async function loadEntries() {
+      const res = await fetch("http://127.0.0.1:5000/api/entries");
+      const entries = await res.json();
+      const list = document.getElementById("entriesList");
+      list.innerHTML = "";
+
+      if (entries.length === 0) {
+        list.innerHTML = `<div class="empty">✨ No entries yet — write your first one! 🖋️</div>`;
+        return;
+      }
+
+      entries.forEach(e => {
+        const card = document.createElement("div");
+        card.className = "entry-item card";
+
+        card.innerHTML = `
+          <div class="entry-header">
+            <span class="entry-mood">${
+              e.mood === "Great" ? "😊" :
+              e.mood === "Good" ? "🙂" :
+              e.mood === "Okay" ? "😐" :
+              e.mood === "Not Great" ? "😕" : "😔"
+            } ${e.mood}</span>
+            <span class="entry-date">📅 ${new Date(e.entry_date).toLocaleDateString()}</span>
+          </div>
+          <p class="entry-note">📝 ${e.note || "No notes added."}</p>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    loadEntries();
+  </script>
+</body>
+</html>

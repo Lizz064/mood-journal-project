@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌙 Mood Journal</title>
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Google Fonts for modern typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<style>/* ==============================
+   Global Styles
+============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==============================
+   Header
+============================== */
+.top-header {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.top-header h1 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.top-nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.top-nav a.active,
+.top-nav a:hover {
+  color: #ffd6e0;
+  transform: translateY(-2px);
+}
+
+/* ==============================
+   Hero Section
+============================== */
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255,255,255,0.1);
+  margin: 2rem auto;
+  max-width: 900px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.hero h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #f0e6ff;
+}
+
+.btn {
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: linear-gradient(90deg, #ff758c, #ff7eb3);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255,118,158,0.4);
+}
+
+.btn.secondary {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.btn.secondary:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ==============================
+   Card Section
+============================== */
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.journal-card .question {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.mood-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.mood-btn {
+  flex: 1;
+  margin: 0 0.3rem;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255,255,255,0.15);
+}
+
+.mood-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #ff758c, #ff7eb3);
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* ==============================
+   Quick Stats
+============================== */
+.quick-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 2rem auto;
+  max-width: 900px;
+}
+
+.stat {
+  text-align: center;
+  background: rgba(255,255,255,0.1);
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  flex: 1;
+}
+
+.stat-num {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #f0e6ff;
+}
+
+/* ==============================
+   Bottom Navigation (Mobile)
+============================== */
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .top-header .top-nav { display: none; }
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 0;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+  .bottom-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+  }
+  .bottom-nav a.active,
+  .bottom-nav a:hover {
+    color: #ffd6e0;
+    transform: translateY(-2px);
+  }
+}
+
+/* ==============================
+   Footer
+============================== */
+footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+  color: #f0e6ff;
+  margin-top: auto;
+}
+</style>
+<body>
+  <!-- Header -->
+  <header class="top-header">
+    <h1>🌙 Mood Journal</h1>
+    <nav class="top-nav">
+      <a href="index.html" class="active">🏠 Home</a>
+      <a href="new.html">➕ ✍️ New Entry</a>
+      <a href="entries.html">📖 My Entries</a>
+      <a href="insights.html">📊 Insights</a>
+    </nav>
+  </header>
+
+  <!-- Hero / Story Section -->
+  <main>
+    <section class="hero">
+      <h2>🌬️ Breathe. ✨ Reflect. 🌱 Grow.</h2>
+      <p>Take a mindful pause and track your journey daily 🌸</p>
+      <a class="btn primary" href="new.html">📝 Start Journaling</a>
+    </section>
+
+    <!-- Daily Journal Quick Input -->
+    <section class="card journal-card">
+      <h2>📅 Daily Journal</h2>
+      <p class="question">💭 How are you feeling today?</p>
+      <div class="mood-grid">
+        <button class="mood-btn">😊 Great</button>
+        <button class="mood-btn">🙂 Good</button>
+        <button class="mood-btn">😐 Okay</button>
+        <button class="mood-btn">😕 Not Great</button>
+        <button class="mood-btn">😔 Bad</button>
+      </div>
+      <div class="card-actions">
+        <a class="btn primary" href="new.html">✍️ Write a Journal</a>
+        <a class="btn secondary" href="entries.html">📖 View Entries</a>
+      </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="quick-stats">
+      <div class="stat">
+        <div class="stat-num">🌍 832,432</div>
+        <div class="stat-label">people thriving today</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">🔥 7</div>
+        <div class="stat-label">day streak</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Navigation (Mobile First) -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="active">🏠 Home</a>
+    <a href="new.html">✍️ Journal</a>
+    <a href="#">🌬️ Breathe</a>
+    <a href="insights.html">📊 Insights</a>
+    <a href="entries.html">📖 Entries</a>
+  </nav>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Mood Journal | Built with ❤️ & ☮️ mindfulness</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

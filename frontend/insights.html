@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📊 Mood Journal - Insights</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="app">
+
+  <!-- Header -->
+  <header class="top-header">
+    <h1>📊 Mood Insights</h1>
+    <p>Reflect on your journey 🌱</p>
+    <nav class="top-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="new.html">✍️ Journal</a>
+      <a href="entries.html">📖 Entries</a>
+      <a href="insights.html" class="active">📊 Insights</a>
+    </nav>
+  </header>
+
+  <!-- Insights Section -->
+  <main class="container">
+
+    <!-- Filters -->
+    <section class="card">
+      <h2>🔍 Filter Insights</h2>
+      <div class="filters">
+        <label>From: <input type="date" id="startDate"></label>
+        <label>To: <input type="date" id="endDate"></label>
+        <label>
+          Sentiment:
+          <select id="sentimentFilter">
+            <option value="">All</option>
+            <option value="POSITIVE">Positive</option>
+            <option value="NEGATIVE">Negative</option>
+            <option value="NEUTRAL">Neutral</option>
+          </select>
+        </label>
+        <button class="btn primary" onclick="loadInsights()">Apply</button>
+      </div>
+    </section>
+
+    <!-- Mood Trend Chart -->
+    <section class="card">
+      <h2>📈 Mood Trends Over Time</h2>
+      <canvas id="moodTrendChart" height="120"></canvas>
+      <p class="note">Track your emotions over time and see your growth 🌟</p>
+    </section>
+
+    <!-- Mood Distribution Pie -->
+    <section class="card">
+      <h2>🌈 Mood Distribution</h2>
+      <canvas id="moodPieChart"></canvas>
+      <p class="note">See how often you feel certain moods 💭</p>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="new.html">✍️ Journal</a>
+    <a href="#">🌬️ Breathe</a>
+    <a href="insights.html" class="active">📊 Insights</a>
+    <a href="entries.html">📖 Entries</a>
+  </nav>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Mood Journal | Built with ❤️ & mindfulness 🧘</p>
+  </footer>
+
+  <!-- JS Logic -->
+  <script>
+    let moodTrendChart, moodPieChart;
+
+    async function loadInsights() {
+      try {
+        // Build API URL with filters
+        let url = "http://127.0.0.1:5000/entries";
+        const params = new URLSearchParams();
+        const start = document.getElementById("startDate").value;
+        const end = document.getElementById("endDate").value;
+        const sentiment = document.getElementById("sentimentFilter").value;
+
+        if (start) params.append("start", start);
+        if (end) params.append("end", end);
+        if (sentiment) params.append("sentiment", sentiment);
+
+        if ([...params].length > 0) {
+          url += "?" + params.toString();
+        }
+
+        // Fetch entries
+        const res = await fetch(url);
+        const entries = await res.json();
+
+        // -----------------
+        // Prepare data
+        // -----------------
+        const labels = entries.map(e => new Date(e.created_at).toLocaleDateString());
+        const moodScale = { "Great": 5, "Good": 4, "Okay": 3, "Not Great": 2, "Bad": 1 };
+        const dataPoints = entries.map(e => moodScale[e.mood] || 0);
+        const sentimentLabels = entries.map(e => e.sentiment);
+
+        // -----------------
+        // Mood Trend Chart
+        // -----------------
+        if (moodTrendChart) moodTrendChart.destroy();
+        moodTrendChart = new Chart(document.getElementById("moodTrendChart"), {
+          type: "line",
+          data: {
+            labels,
+            datasets: [{
+              label: "Mood Over Time",
+              data: dataPoints,
+              borderColor: "#2563eb",
+              backgroundColor: "rgba(37, 99, 235, 0.2)",
+              fill: true,
+              tension: 0.3,
+              pointBackgroundColor: sentimentLabels.map(s =>
+                s === "POSITIVE" ? "green" : s === "NEGATIVE" ? "red" : "gray"
+              ),
+              pointRadius: 6,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                min: 0,
+                max: 5,
+                ticks: {
+                  stepSize: 1,
+                  callback: val => ["", "😔 Bad", "😕 Not Great", "😐 Okay", "🙂 Good", "😊 Great"][val]
+                }
+              }
+            }
+          }
+        });
+
+        // -----------------
+        // Mood Distribution Pie
+        // -----------------
+        const moodCounts = { "😊 Great": 0, "🙂 Good": 0, "😐 Okay": 0, "😕 Not Great": 0, "😔 Bad": 0 };
+        entries.forEach(e => {
+          if (e.mood === "Great") moodCounts["😊 Great"]++;
+          if (e.mood === "Good") moodCounts["🙂 Good"]++;
+          if (e.mood === "Okay") moodCounts["😐 Okay"]++;
+          if (e.mood === "Not Great") moodCounts["😕 Not Great"]++;
+          if (e.mood === "Bad") moodCounts["😔 Bad"]++;
+        });
+
+        if (moodPieChart) moodPieChart.destroy();
+        moodPieChart = new Chart(document.getElementById("moodPieChart"), {
+          type: "pie",
+          data: {
+            labels: Object.keys(moodCounts),
+            datasets: [{
+              data: Object.values(moodCounts),
+              backgroundColor: ["#4CAF50", "#2196F3", "#FFC107", "#FF9800", "#F44336"]
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: "bottom" },
+              title: { display: true, text: "Mood Distribution" }
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error("Failed to load insights:", error);
+      }
+    }
+
+    // Auto-load charts
+    loadInsights();
+  </script>
+
+</body>
+</html>

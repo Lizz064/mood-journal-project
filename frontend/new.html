@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Journal Entry</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<style>
+    /* ==============================
+   Global Styles
+============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==============================
+   Header
+============================== */
+header {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+header h1 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+header nav a.active,
+header nav a:hover {
+  color: #ffd6e0;
+  transform: translateY(-2px);
+}
+
+/* ==============================
+   Card Section
+============================== */
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.card h2.question {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* ==============================
+   Mood Buttons
+============================== */
+.mood-grid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+}
+
+.mood-btn {
+  flex: 1 1 48%;
+  background: rgba(255,255,255,0.15);
+  border-radius: 12px;
+  text-align: center;
+  padding: 0.8rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mood-btn input[type="radio"] {
+  display: none;
+}
+
+.mood-btn:hover,
+.mood-btn input:checked + & {
+  background: linear-gradient(90deg, #ff758c, #ff7eb3);
+  transform: translateY(-2px);
+}
+
+/* ==============================
+   Textarea
+============================== */
+textarea#note {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 15px;
+  border: none;
+  resize: vertical;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  outline: none;
+  backdrop-filter: blur(5px);
+}
+
+/* ==============================
+   Buttons
+============================== */
+.btn {
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.25);
+}
+
+.btn.primary {
+  background: linear-gradient(90deg, #ff758c, #ff7eb3);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  box-shadow: 0 5px 15px rgba(255,118,158,0.4);
+}
+
+/* ==============================
+   Card Actions
+============================== */
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+/* ==============================
+   Footer
+============================== */
+footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+  color: #f0e6ff;
+  margin-top: auto;
+}
+
+/* ==============================
+   Responsive
+============================== */
+@media (max-width: 600px) {
+  .mood-btn {
+    flex: 1 1 100%;
+  }
+}
+
+</style>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>✨ New Journal Entry</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="new.html" class="active">New Entry</a>
+      <a href="entries.html">My Entries</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="card journal-card">
+      <h2 class="question">How are you feeling today?</h2>
+
+      <!-- Mood selection -->
+      <div class="mood-grid">
+        <label class="mood-btn">
+          <input type="radio" name="mood" value="Great"> 😊 Great
+        </label>
+        <label class="mood-btn">
+          <input type="radio" name="mood" value="Good"> 🙂 Good
+        </label>
+        <label class="mood-btn">
+          <input type="radio" name="mood" value="Okay"> 😐 Okay
+        </label>
+        <label class="mood-btn">
+          <input type="radio" name="mood" value="Not Great"> 😕 Not Great
+        </label>
+        <label class="mood-btn">
+          <input type="radio" name="mood" value="Bad"> 😔 Bad
+        </label>
+      </div>
+
+      <!-- Note textarea -->
+      <textarea id="note" placeholder="Write your thoughts here..." rows="5"></textarea>
+
+      <!-- Action buttons -->
+      <div class="card-actions">
+        <button class="btn" onclick="window.location.href='index.html'">⬅ Back</button>
+        <button class="btn primary" onclick="saveEntry()">💾 Save Entry</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Mood Journal | Powered by Hugging Face 🤖</p>
+  </footer>
+
+<script>
+async function saveEntry() {
+    const mood = document.querySelector('input[name="mood"]:checked')?.value;
+    const note = document.getElementById('note').value;
+
+    if (!mood) {
+        alert("⚠️ Please select your mood!");
+        return;
+    }
+
+    try {
+        const res = await fetch("http://127.0.0.1:5000/api/entries", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mood, note })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("✅ Entry saved successfully!");
+            // Reset form
+            document.getElementById('note').value = "";
+            document.querySelectorAll('input[name="mood"]').forEach(el => el.checked = false);
+        } else {
+            alert("❌ Error: " + data.error);
+        }
+
+    } catch (err) {
+        alert("❌ Server error, try again.");
+        console.error(err);
+    }
+}
+</script>
+
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

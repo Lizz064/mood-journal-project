@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🔒 Mood Journal — Auth</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    /* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Auth Container */
+.auth-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  width: 380px;
+  color: white;
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Forms */
+.form {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  animation: slideIn 0.5s ease forwards;
+}
+
+.form.active {
+  display: flex;
+}
+
+.form h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Inputs */
+.form input {
+  width: 80%;
+  padding: 12px;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+  font-size: 1rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form input:focus {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 10px rgba(255, 118, 158, 0.5);
+}
+
+/* Buttons */
+.form button {
+  width: 60%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(90deg, #ff758c, #ff7eb3);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 118, 158, 0.5);
+}
+
+/* Toggle links */
+.toggle-link {
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  color: #ffd6e0;
+  transition: color 0.3s ease;
+}
+
+.toggle-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Messages */
+#login-msg, #signup-msg {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  min-height: 18px;
+  text-align: center;
+  color: #ffeb3b; /* Yellow for visibility */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+  </style>
+</head>
+<body>
+  <main class="auth-container">
+    <!-- Login Form -->
+    <div id="login-form" class="form active">
+      <h2>🔑 Login</h2>
+      <input type="text" id="login-username" placeholder="Enter username">
+      <input type="password" id="login-pin" placeholder="Enter your PIN">
+      <button onclick="login()">Login</button>
+      <p id="login-msg"></p>
+      <p class="toggle-link" onclick="toggleForm('signup')">Don't have an account? Create one</p>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signup-form" class="form">
+      <h2>✨ Create Account</h2>
+      <input type="text" id="signup-username" placeholder="Enter username">
+      <input type="password" id="signup-pin" placeholder="Enter your PIN">
+      <button onclick="signup()">Sign Up</button>
+      <p id="signup-msg"></p>
+      <p class="toggle-link" onclick="toggleForm('login')">Already have an account? Login</p>
+    </div>
+  </main>
+
+  <script>
+    function toggleForm(form) {
+      document.getElementById("login-form").classList.remove("active");
+      document.getElementById("signup-form").classList.remove("active");
+      document.getElementById(form + "-form").classList.add("active");
+    }
+
+    async function login() {
+      const username = document.getElementById("login-username").value;
+      const pin = document.getElementById("login-pin").value;
+
+      if (!username || !pin) {
+        document.getElementById("login-msg").innerText = "⚠️ Please enter username and PIN.";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://127.0.0.1:5000/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, pin })
+        });
+        const data = await res.json();
+        document.getElementById("login-msg").innerText = data.message || data.error;
+        if (res.ok) setTimeout(() => window.location.href = "index.html", 500);
+      } catch (err) {
+        document.getElementById("login-msg").innerText = "❌ Server error, try again.";
+      }
+    }
+
+    async function signup() {
+      const username = document.getElementById("signup-username").value;
+      const pin = document.getElementById("signup-pin").value;
+
+      if (!username || !pin) {
+        document.getElementById("signup-msg").innerText = "⚠️ Please enter username and PIN.";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://127.0.0.1:5000/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, pin })
+        });
+        const data = await res.json();
+        document.getElementById("signup-msg").innerText = data.message || data.error;
+        if (res.ok) setTimeout(() => toggleForm("login"), 500);
+      } catch (err) {
+        document.getElementById("signup-msg").innerText = "❌ Server error, try again.";
+      }
+    }
+  </script>
+</body>
+</html>
